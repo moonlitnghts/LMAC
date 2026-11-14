@@ -1,77 +1,36 @@
 (() => {
   "use strict";
 
-  const config = window.SITE_CONFIG || {};
-  const email = config.contactEmail || "REPLACE_WITH_REAL_EMAIL@example.com";
-  const serviceArea = config.serviceArea || "Maine";
-  const regionLabel = config.regionLabel || "Maine";
+  const $ = (id) => document.getElementById(id);
+  const header = $("header");
+  const toggle = $("menuToggle");
+  const nav = $("navigation");
 
-  // Apply the same editable business details to page title and social/search metadata.
-  document.title = document.title
-    .replaceAll("{{SERVICE_AREA}}", serviceArea)
-    .replaceAll("{{REGION_LABEL}}", regionLabel)
-    .replaceAll("{{CONTACT_EMAIL}}", email);
-  document.querySelectorAll("head meta[content]").forEach((meta) => {
-    const value = meta.getAttribute("content");
-    if (value && value.includes("{{")) {
-      meta.setAttribute("content", value
-        .replaceAll("{{SERVICE_AREA}}", serviceArea)
-        .replaceAll("{{REGION_LABEL}}", regionLabel)
-        .replaceAll("{{CONTACT_EMAIL}}", email));
-    }
-  });
-
-  // Fill the editable business details wherever their tokens appear.
-  document.querySelectorAll("body *").forEach((element) => {
-    if (element.children.length === 0 && element.textContent) {
-      element.textContent = element.textContent
-        .replaceAll("{{SERVICE_AREA}}", serviceArea)
-        .replaceAll("{{REGION_LABEL}}", regionLabel)
-        .replaceAll("{{CONTACT_EMAIL}}", email);
-    }
-    for (const attr of ["href", "content", "aria-label"]) {
-      const value = element.getAttribute?.(attr);
-      if (value && value.includes("{{")) {
-        element.setAttribute(attr, value
-          .replaceAll("{{SERVICE_AREA}}", serviceArea)
-          .replaceAll("{{REGION_LABEL}}", regionLabel)
-          .replaceAll("{{CONTACT_EMAIL}}", email));
-      }
-    }
-  });
-
-  const header = document.getElementById("header");
-  const toggle = document.getElementById("menuToggle");
-  const nav = document.getElementById("navigation");
-
-  const updateHeader = () => {
-    if (header) header.classList.toggle("scrolled", window.scrollY > 35);
-  };
+  // Header shrinks slightly after scrolling.
+  const updateHeader = () => header && header.classList.toggle("scrolled", window.scrollY > 35);
   window.addEventListener("scroll", updateHeader, { passive: true });
   updateHeader();
 
-  const closeMenu = () => {
+  // Mobile menu.
+  const setMenu = (open) => {
     if (!nav || !toggle) return;
-    nav.classList.remove("open");
-    toggle.setAttribute("aria-expanded", "false");
-    toggle.setAttribute("aria-label", "Open navigation");
-    toggle.textContent = "☰";
+    nav.classList.toggle("open", open);
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
+    toggle.textContent = open ? "×" : "☰";
   };
-
   if (toggle && nav) {
-    toggle.addEventListener("click", () => {
-      const isOpen = nav.classList.toggle("open");
-      toggle.setAttribute("aria-expanded", String(isOpen));
-      toggle.setAttribute("aria-label", isOpen ? "Close navigation" : "Open navigation");
-      toggle.textContent = isOpen ? "×" : "☰";
-    });
-    nav.querySelectorAll("a").forEach((link) => link.addEventListener("click", closeMenu));
+    toggle.addEventListener("click", () => setMenu(!nav.classList.contains("open")));
+    nav.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => setMenu(false)));
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") closeMenu();
+      if (event.key === "Escape" && nav.classList.contains("open")) {
+        setMenu(false);
+        toggle.focus();
+      }
     });
   }
 
-  // Reveal sections as they enter the viewport; respect reduced-motion settings in CSS.
+  // Reveal sections on scroll. CSS only hides them when JS is running (html.js).
   const revealItems = document.querySelectorAll(".fade-in");
   if ("IntersectionObserver" in window) {
     const observer = new IntersectionObserver((entries) => {
@@ -87,32 +46,64 @@
     revealItems.forEach((item) => item.classList.add("visible"));
   }
 
-  const year = document.getElementById("year");
+  const year = $("year");
   if (year) year.textContent = new Date().getFullYear();
 
-  // Static hosting has no email server. This prepares an email in the visitor's mail app.
-  const form = document.getElementById("contactForm");
-  if (form) {
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      if (!email || email.includes("REPLACE_WITH")) {
-        const note = document.getElementById("formNote");
-        if (note) note.textContent = "Before launch, add the business email in config.js.";
-        return;
-      }
-      const data = new FormData(form);
-      const subject = `Website inquiry: ${data.get("project")}`;
-      const body = [
-        `Name: ${data.get("name")}`,
-        `Email: ${data.get("email")}`,
-        `Project: ${data.get("project")}`,
-        "",
-        "Project details:",
-        data.get("details") || "(Not provided)"
-      ].join("\n");
-      window.location.href = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      const note = document.getElementById("formNote");
-      if (note) note.textContent = "Your email app should open with the inquiry ready to send.";
-    });
-  }
+  // Inquiry form: posts to the form service in the form's action attribute.
+  const form = $("contactForm");
+  if (!form) return;
+  const note = $("formNote");
+  const success = $("formSuccess");
+  const button = form.querySelector("button[type=submit]");
+  const email = form.dataset.email || "";
+
+  const setNote = (message, isError = false) => {
+    note.textContent = message;
+    note.classList.toggle("error", isError);
+  };
+
+  // Used only until a form service is connected (action still contains REPLACE_WITH).
+  const openMailApp = (data) => {
+    const subject = `Website inquiry: ${data.get("project")}`;
+    const body = [
+      `Name: ${data.get("name")}`,
+      `Email: ${data.get("email")}`,
+      `Project: ${data.get("project")}`,
+      "",
+      "Project details:",
+      data.get("details") || "(Not provided)"
+    ].join("\n");
+    window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const data = new FormData(form);
+    if (data.get("_gotcha")) return; // honeypot filled in: likely a bot
+
+    const endpoint = form.getAttribute("action") || "";
+    if (endpoint.includes("REPLACE_WITH")) {
+      console.warn("Contact form is not connected to a form service yet. See README.");
+      openMailApp(data);
+      return;
+    }
+
+    button.disabled = true;
+    setNote("Sending…");
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        body: data,
+        headers: { Accept: "application/json" }
+      });
+      if (!response.ok) throw new Error(`Form service returned ${response.status}`);
+      form.reset();
+      form.hidden = true;
+      success.hidden = false;
+      success.focus();
+    } catch (error) {
+      setNote(`That didn't send. Please try again, or email us at ${email}.`, true);
+      button.disabled = false;
+    }
+  });
 })();
