@@ -1,4 +1,4 @@
-:root{--ivory:#f5f3ee;--paper:#ebe8df;--green:#263a32;--green2:#354c40;--ink:#292b29;--muted:#5c5f58;--taupe:#b5aa99;--bronze:#9d8060;--white:#fff;--serif:'Italiana',Georgia,serif;--sans:'DM Sans',Arial,sans-serif;--gutter:clamp(22px,6.1vw,94px)}
+:root{--ivory:#f5f3ee;--paper:#ebe8df;--green:#263a32;--green2:#354c40;--ink:#292b29;--muted:#5c5f58;--taupe:#b5aa99;--bronze:#9d8060;--white:#fff;--serif:'Italiana',Georgia,serif;--sans:'DM Sans',Arial,sans-serif;--gutter:max(clamp(22px,6.1vw,94px),calc((100vw - 1500px)/2))}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:86px}body{margin:0;background:var(--ivory);color:var(--ink);font:14px/1.75 var(--sans);-webkit-font-smoothing:antialiased}a{color:inherit;text-decoration:none}img{display:block;width:100%;height:100%;object-fit:cover}button,input,textarea,select{font:inherit}button,a{-webkit-tap-highlight-color:transparent}::selection{background:var(--green);color:white}
 h1,h2,h3,p{margin-top:0}h1,h2,h3{font-weight:400}h2{font:clamp(39px,5.2vw,70px)/1.08 var(--serif);letter-spacing:-.025em}h1 em,h2 em{font-weight:400;color:#d8c8ae}.section{padding:clamp(82px,10vw,142px) var(--gutter)}.eyebrow{display:flex;align-items:center;gap:12px;margin:0 0 20px;color:var(--bronze);font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase}.eyebrow:before{content:"";width:30px;height:1px;background:currentColor}
 .header{position:fixed;z-index:30;inset:0 0 auto;height:92px;padding:0 var(--gutter);display:flex;align-items:center;justify-content:space-between;color:var(--green);background:rgba(245,243,238,.98);border-bottom:1px solid #263a3224;box-shadow:0 2px 14px rgba(25,35,29,.06);transition:height .3s,background .3s,box-shadow .3s;backdrop-filter:blur(12px)}.header.scrolled{height:76px;background:rgba(245,243,238,.98);color:var(--green);border-color:#263a3224;box-shadow:0 3px 18px rgba(25,35,29,.08)}.brand{display:flex;align-items:center;gap:12px}.nav{display:flex;align-items:center;gap:clamp(18px,3vw,44px)}.nav a{font-size:11px;letter-spacing:.12em;text-transform:uppercase}.nav a:hover{opacity:.65}.nav .nav-cta{padding:12px 19px;border:1px solid currentColor}.menu-toggle{display:none;border:0;background:none;color:inherit;font-size:24px;cursor:pointer}
@@ -155,3 +155,18 @@ img{max-width:100%}
 
 /* Light logo on the dark footer */
 .footer .brand-logo{width:clamp(190px,22vw,250px);height:auto}
+
+/* Text-only service tiles (no stock photography) */
+.service-card{height:auto;min-height:clamp(170px,18vw,230px);aspect-ratio:auto;display:flex;align-items:flex-end;padding:26px;background:var(--green);transition:background .3s}
+.service-card:hover{background:#2f4a3f}
+.service-card:after{display:none}
+.service-card-copy{position:static;width:100%}
+.service-card-copy span{color:#c9b48f}
+@media(max-width:650px){.service-card{min-height:150px;padding:16px 14px}}
+@media(max-width:390px){.service-card{min-height:120px;padding:18px}}
+
+/* Hero headline: more room between lines and letters */
+.hero h1{line-height:1.1;letter-spacing:-.015em}
+
+/* Wide screens: keep the second project a comfortable shape */
+@media(min-width:901px){.project.small{height:470px;margin-top:70px}}
