@@ -210,3 +210,5 @@ img{max-width:100%}
 .review-badge[hidden]{display:none}
 .review-badge img{display:block;width:90px;height:auto}
 .review-badge:hover{opacity:.85}
+
+.step h3.welcome{font:700 23px var(--sans);letter-spacing:.01em;color:#a85d1a}
