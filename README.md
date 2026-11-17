@@ -26,7 +26,7 @@ The official website for **LMAC Customs**, a residential construction company se
 
 The website showcases completed projects, highlights construction services, introduces the company, and provides a direct way for prospective clients to submit inquiries.
 
-Built with lightweight, modern web technologies, the site prioritizes performance, accessibility, mobile responsiveness, and straightforward maintenance.
+Designed by Alex, built using with lightweight, modern web technologies, the site prioritizes performance, accessibility, mobile responsiveness, and straightforward maintenance.
 
 ### ✨ Key Features
 
