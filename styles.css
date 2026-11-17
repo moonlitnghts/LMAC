@@ -216,3 +216,5 @@ img{max-width:100%}
 .section-heading h2.work-title{max-width:none}
 .work-title em{white-space:nowrap}
 @media(max-width:650px){.section-heading h2.work-title{font-size:clamp(28px,8.2vw,40px)}}
+
+.hero h1 em{font-style:normal}
