@@ -223,3 +223,5 @@ img{max-width:100%}
 .step.final .step-number{color:var(--green)}
 .step.final h3{font-size:30px}
 @media(max-width:650px){.step.final{margin:0 -14px;padding:24px 14px}.step.final h3{font-size:26px}}
+.work-title .nw{white-space:nowrap}
+.intro h2 em{color:#8f7152}
