@@ -211,7 +211,6 @@ img{max-width:100%}
 .review-badge img{display:block;width:90px;height:auto}
 .review-badge:hover{opacity:.85}
 
-.step h3.welcome{color:#1f5a3c;-webkit-text-stroke:.7px #1f5a3c}
 
 .section-heading h2.work-title{max-width:none}
 .work-title em{white-space:nowrap}
@@ -220,3 +219,7 @@ img{max-width:100%}
 @media(max-width:650px){.hero h1 .bw{display:block}}
 .hero h1 .lv{display:block}
 @media(max-width:650px){.statement h2{font-size:clamp(34px,9.6vw,44px)}.statement h2 .sw,.statement h2 .cc{display:block}.statement h2 .cc{white-space:nowrap}}
+.step.final{margin:0 -18px;padding:30px 18px;background:var(--paper)}
+.step.final .step-number{color:var(--green)}
+.step.final h3{font-size:30px}
+@media(max-width:650px){.step.final{margin:0 -14px;padding:24px 14px}.step.final h3{font-size:26px}}
