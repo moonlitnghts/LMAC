@@ -226,8 +226,30 @@ img{max-width:100%}
 .work-title .nw{white-space:nowrap}
 .intro h2 em{color:#8f7152}
 
-/* Desktop hero headline: give each phrase its own line without crowding the hero. */
-@media (min-width:651px){
-  .hero h1{font-size:clamp(58px,7.2vw,100px);line-height:.98}
-  .hero h1 .bw{display:block}
+
+/* Portrait desktop displays: give the hero headline its own line per phrase.
+   This catches tall monitors and narrow desktop windows without changing mobile. */
+@media (min-width:651px) and (max-aspect-ratio:4/5) {
+  .hero {
+    min-height: min(900px, 100svh);
+    height: auto;
+    padding-top: 118px;
+    padding-bottom: 86px;
+  }
+  .hero-content {
+    max-width: 640px;
+    margin-top: 0;
+  }
+  .hero h1 {
+    max-width: 620px;
+    font-size: clamp(58px, 7.2vw, 92px);
+    line-height: 1.02;
+    letter-spacing: -.02em;
+  }
+  .hero h1 .bw {
+    display: block;
+  }
+  .hero-copy {
+    max-width: 430px;
+  }
 }
