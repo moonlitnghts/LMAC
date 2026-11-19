@@ -225,3 +225,9 @@ img{max-width:100%}
 @media(max-width:650px){.step.final{margin:0 -14px;padding:24px 14px}.step.final h3{font-size:26px}}
 .work-title .nw{white-space:nowrap}
 .intro h2 em{color:#8f7152}
+
+/* Desktop hero headline: give each phrase its own line without crowding the hero. */
+@media (min-width:651px){
+  .hero h1{font-size:clamp(58px,7.2vw,100px);line-height:.98}
+  .hero h1 .bw{display:block}
+}
