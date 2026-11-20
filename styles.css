@@ -254,3 +254,17 @@ img{max-width:100%}
     margin-right:0;
   }
 }
+
+/* Hero: fit the whole first screen (headline + buttons) on laptops */
+@media(min-width:651px){
+  .hero{height:auto;min-height:min(100svh,980px);max-height:none;padding-top:calc(92px + 28px);padding-bottom:44px}
+  .hero-content{margin-top:0}
+  .hero h1{max-width:min(900px,100%);margin-bottom:clamp(14px,2.6svh,25px);font-size:clamp(46px,min(7.2vw,12.5svh),112px)}
+  .hero-copy{margin-bottom:clamp(20px,3.6svh,34px)}
+}
+/* About: bring the illustration closer to the text and make it larger */
+@media(min-width:901px){
+  .intro{grid-template-columns:minmax(0,480px) minmax(0,1fr);gap:clamp(28px,4vw,64px)}
+  .intro-image{height:auto;margin:0}
+  .intro-image img{display:block;width:min(100%,860px);height:auto;margin:0 auto;object-fit:contain}
+}
